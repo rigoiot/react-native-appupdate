@@ -13,6 +13,7 @@ const jobId = -1;
 class AppUpdate {
   constructor(options) {
     this.options = options;
+    this.options.fetchApkVersion = options.fetchApkVersion || this.GET
   }
 
   GET(url, success, error) {
@@ -34,7 +35,7 @@ class AppUpdate {
       console.log("apkVersionUrl doesn't exist.");
       return;
     }
-    this.GET(this.options.apkVersionUrl, this.getApkVersionSuccess.bind(this), this.getVersionError.bind(this));
+    this.options.fetchApkVersion(this.options.apkVersionUrl, this.getApkVersionSuccess.bind(this), this.getVersionError.bind(this));
   }
 
   getApkVersionSuccess(remote) {
