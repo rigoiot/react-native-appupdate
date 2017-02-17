@@ -40,7 +40,11 @@ class AppUpdate {
 
   getApkVersionSuccess(remote) {
     console.log("getApkVersionSuccess", remote);
-    if (RNAppUpdate.versionName !== remote.versionName) {
+    let needUpdate = RNAppUpdate.versionName !== remote.versionName;
+    if (this.options.versionCheck) {
+      needUpdate = this.options.versionCheck(remote, RNAppUpdate);
+    }
+    if (needUpdate) {
       if (remote.forceUpdate) {
         if(this.options.forceUpdateApp) {
           this.options.forceUpdateApp();
@@ -110,7 +114,13 @@ class AppUpdate {
     const result = data.results[0];
     const version = result.version;
     const trackViewUrl = result.trackViewUrl;
-    if (version !== RNAppUpdate.versionName) {
+
+    let needUpdate = version !== RNAppUpdate.versionName;
+    if (this.options.versionCheck) {
+      needUpdate = this.options.versionCheck(result, RNAppUpdate);
+    }
+
+    if (needUpdate) {
       if (remote.forceUpdate) {
         if(this.options.forceUpdateApp) {
           this.options.forceUpdateApp();
